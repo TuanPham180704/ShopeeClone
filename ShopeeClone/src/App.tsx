@@ -1,5 +1,12 @@
+import useRouteElement from "src/useRouteElement"
+
 function App() {
-  return <div className='bg-red-500 text-white p-10 '>Tailwind test</div>
+ const routeElements = useRouteElement()
+  return (
+    <div>
+      {routeElements}
+    </div>
+  )
 }
 
 export default App
