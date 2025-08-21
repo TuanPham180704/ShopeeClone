@@ -1,6 +1,6 @@
 import { useForm, type RegisterOptions } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import { rules } from 'src/utils/rules'
+import { data, Link } from 'react-router-dom'
+import { getrules } from 'src/utils/rules'
 
 interface FormData {
   email: string
@@ -12,13 +12,21 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    watch,
+    getValues,
     formState: { errors }
   } = useForm<FormData>()
+  const rules = getrules(getValues)
+  const onSubmit = handleSubmit(
+    (data) => {
+      // console.log(data)
+    },
+    (data) => {
+      const password = getValues('password')
+      console.log(password)
+    }
+  )
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
-  })
-  console.log('err', errors)
   return (
     <div className='bg-orange'>
       <div className='max-w-7xl mxx-auto px-4'>
@@ -38,6 +46,7 @@ export default function Register() {
               <div className='mt-3'>
                 <input
                   type='password'
+                  autoComplete='on'
                   className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                   placeholder='Password'
                   {...register('password', rules.password as RegisterOptions<FormData, 'password'>)}
@@ -47,6 +56,7 @@ export default function Register() {
               <div className='mt-3'>
                 <input
                   type='password'
+                  autoComplete='on'
                   className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                   placeholder='Confirm-password'
                   {...register(
