@@ -1,5 +1,5 @@
 import { useForm, type RegisterOptions } from 'react-hook-form'
-import { data, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getrules } from 'src/utils/rules'
 
 interface FormData {
@@ -18,9 +18,7 @@ export default function Register() {
   } = useForm<FormData>()
   const rules = getrules(getValues)
   const onSubmit = handleSubmit(
-    (data) => {
-      // console.log(data)
-    },
+    (data) => {},
     (data) => {
       const password = getValues('password')
       console.log(password)
@@ -28,8 +26,8 @@ export default function Register() {
   )
 
   return (
-    <div className='bg-orange'>
-      <div className='max-w-7xl mxx-auto px-4'>
+    <div className='bg-orange '>
+      <div className='container'>
         <div className='grid grid-cols-1  lg:grid-cols-5 py-12 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit} noValidate>
