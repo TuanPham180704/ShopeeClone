@@ -70,7 +70,7 @@ export const schema = yup.object({
   .string()
   .required('Confirm_password là bắt buộc ')
   .min(6,'Độ dài từ 6 - 100 ký tự')
-  .max(100,'Độ dài từ 6 - 100 ký tự')
+  .max(100,'Độ dài từ 6 - 100 ký tự ..')
   .oneOf([yup.ref('password')],'Confirm_password không trùng khớp')
 })
 
