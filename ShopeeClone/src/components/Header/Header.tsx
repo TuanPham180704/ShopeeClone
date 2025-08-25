@@ -123,25 +123,146 @@ export default function Header() {
               </button>
             </div>
           </form>
-          <div className='cols-span-1'>
-            <Link to='/'>
-              <svg
-                data-slot='icon'
-                fill='none'
-                stroke-width={1.5}
-                className='w-8 h-8'
-                stroke='currentColor'
-                viewBox='0 0 24 24'
-                xmlns='http://www.w3.org/2000/svg'
-                aria-hidden='true'
-              >
-                <path
-                  stroke-linecap='round'
-                  stroke-linejoin='round'
-                  d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
-                ></path>
-              </svg>
-            </Link>
+          <div className='col-span-1 justify-self-end'>
+            <Popover
+              initialOpen
+              renderPopover={
+                <div className='bg-white relative shadow-md rounded-sm boder border-gray-200 max-w-[400px] text-sm'>
+                  <div className='p-2'>
+                    <div className='text-gray-400 capitalize'>Sản Phẩm Mới Thêm</div>
+                    <div className='mt-5'>
+                      <div className='mt-4 flex'>
+                        <div className='flex-shrink-0'>
+                          <img
+                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lguzy3vvs182e8@resize_w900_nl.webp'
+                            alt='laptop'
+                            className='w-11 h-11 object-cover'
+                          />
+                        </div>
+                        <div className='flex-grow ml-2 overflow-hidden'>
+                          <div className='trumcate'>
+                            New Full box Sony WH CH520 Tai nghe không dây on ear kết nối đa điểm
+                          </div>
+                        </div>
+                        <div className='ml-2 flex-shrink-0'>
+                          <span className='text-orange'>₫1.156.331</span>
+                        </div>
+                      </div>
+                      <div className='mt-4 flex'>
+                        <div className='flex-shrink-0'>
+                          <img
+                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lguzy3vvs182e8@resize_w900_nl.webp'
+                            alt='laptop'
+                            className='w-11 h-11 object-cover'
+                          />
+                        </div>
+                        <div className='flex-grow ml-2 overflow-hidden'>
+                          <div className='trumcate'>
+                            New Full box Sony WH CH520 Tai nghe không dây on ear kết nối đa điểm
+                          </div>
+                        </div>
+                        <div className='ml-2 flex-shrink-0'>
+                          <span className='text-orange'>₫1.156.331</span>
+                        </div>
+                      </div>
+                      <div className='mt-4 flex'>
+                        <div className='flex-shrink-0'>
+                          <img
+                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lguzy3vvs182e8@resize_w900_nl.webp'
+                            alt='laptop'
+                            className='w-11 h-11 object-cover'
+                          />
+                        </div>
+                        <div className='flex-grow ml-2 overflow-hidden'>
+                          <div className='trumcate'>
+                            New Full box Sony WH CH520 Tai nghe không dây on ear kết nối đa điểm
+                          </div>
+                        </div>
+                        <div className='ml-2 flex-shrink-0'>
+                          <span className='text-orange'>₫1.156.331</span>
+                        </div>
+                      </div>
+                      <div className='mt-4 flex'>
+                        <div className='flex-shrink-0'>
+                          <img
+                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lguzy3vvs182e8@resize_w900_nl.webp'
+                            alt='laptop'
+                            className='w-11 h-11 object-cover'
+                          />
+                        </div>
+                        <div className='flex-grow ml-2 overflow-hidden'>
+                          <div className='trumcate'>
+                            New Full box Sony WH CH520 Tai nghe không dây on ear kết nối đa điểm
+                          </div>
+                        </div>
+                        <div className='ml-2 flex-shrink-0'>
+                          <span className='text-orange'>₫1.156.331</span>
+                        </div>
+                      </div>
+                      <div className='mt-4 flex'>
+                        <div className='flex-shrink-0'>
+                          <img
+                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lguzy3vvs182e8@resize_w900_nl.webp'
+                            alt='laptop'
+                            className='w-11 h-11 object-cover'
+                          />
+                        </div>
+                        <div className='flex-grow ml-2 overflow-hidden'>
+                          <div className='trumcate'>
+                            New Full box Sony WH CH520 Tai nghe không dây on ear kết nối đa điểm
+                          </div>
+                        </div>
+                        <div className='ml-2 flex-shrink-0'>
+                          <span className='text-orange'>₫1.156.331</span>
+                        </div>
+                      </div>
+                      <div className='mt-4 flex'>
+                        <div className='flex-shrink-0'>
+                          <img
+                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lguzy3vvs182e8@resize_w900_nl.webp'
+                            alt='laptop'
+                            className='w-11 h-11 object-cover'
+                          />
+                        </div>
+                        <div className='flex-grow ml-2 overflow-hidden'>
+                          <div className='trumcate'>
+                            New Full box Sony WH CH520 Tai nghe không dây on ear kết nối đa điểm
+                          </div>
+                        </div>
+                        <div className='ml-2 flex-shrink-0'>
+                          <span className='text-orange'>₫1.156.331</span>
+                        </div>
+                      </div>
+                      <div className='flex mt-6 items-center justify-between'>
+                        <div className='capitalize text- text-gray-500'>Thêm vào giỏ hàng</div>
+                        <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                          Xem giỏ hàng
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            >
+              <Link to='/'>
+                <svg
+                  data-slot='icon'
+                  fill='none'
+                  stroke-width={1.5}
+                  className='w-8 h-8'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                  xmlns='http://www.w3.org/2000/svg'
+                  aria-hidden='true'
+                >
+                  <path
+                    stroke-linecap='round'
+                    stroke-linejoin='round'
+                    d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
+                  ></path>
+                </svg>
+              </Link>
+            </Popover>
           </div>
         </div>
       </div>

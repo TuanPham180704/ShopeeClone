@@ -1,21 +1,30 @@
 import React, { useId, useRef, useState, type ElementType } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { arrow, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react-dom-interactions'
+import { arrow, FloatingPortal, offset, shift, useFloating, type Placement } from '@floating-ui/react-dom-interactions'
 
 interface Props {
-  children : React.ReactNode
-  renderPopover : React.ReactNode
+  children: React.ReactNode
+  renderPopover: React.ReactNode
   className?: string
-  as? : ElementType
-  initialOpen? : boolean
+  as?: ElementType
+  initialOpen?: boolean
+  playcement?: Placement
 }
 
-export default function Popover({children,renderPopover,className, as : Element = 'div',initialOpen} : Props) {
+export default function Popover({
+  children,
+  renderPopover,
+  className,
+  as: Element = 'div',
+  initialOpen,
+  playcement = 'bottom-end'
+}: Props) {
   const [open, setOpen] = useState(initialOpen || false)
   const arrowRef = useRef<HTMLElement>(null)
   const id = useId()
   const { x, y, reference, floating, strategy, middlewareData } = useFloating({
-    middleware: [offset(6), shift(), arrow({ element: arrowRef })]
+    middleware: [offset(6), shift(), arrow({ element: arrowRef })],
+    placement: playcement
   })
   const showPoppover = () => {
     setOpen(true)
@@ -24,13 +33,8 @@ export default function Popover({children,renderPopover,className, as : Element 
     setOpen(false)
   }
   return (
-    <Element
-      className={className}
-      ref={reference}
-      onMouseEnter={showPoppover}
-      onMouseLeave={hidePoppover}
-    >
-    {children}
+    <Element className={className} ref={reference} onMouseEnter={showPoppover} onMouseLeave={hidePoppover}>
+      {children}
       <FloatingPortal id={id}>
         <AnimatePresence>
           {open && (
@@ -56,7 +60,7 @@ export default function Popover({children,renderPopover,className, as : Element 
                   top: middlewareData.arrow?.y
                 }}
               />
-             {renderPopover}
+              {renderPopover}
             </motion.div>
           )}
         </AnimatePresence>
