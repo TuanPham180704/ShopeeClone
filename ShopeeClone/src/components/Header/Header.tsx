@@ -1,19 +1,7 @@
 import { Link } from 'react-router-dom'
-import { useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { arrow, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react-dom-interactions'
+import Popover from 'src/components/Popover'
+
 export default function Header() {
-  const [open, setOpen] = useState(false)
-  const arrowRef = useRef<HTMLElement>(null)
-  const { x, y, reference, floating, strategy, middlewareData } = useFloating({
-    middleware: [offset(6), shift(), arrow({ element: arrowRef })]
-  })
-  const showPoppover = () => {
-    setOpen(true)
-  }
-  const hidePoppover = () => {
-    setOpen(false)
-  }
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='container '>
@@ -26,13 +14,17 @@ export default function Header() {
               <span className='mx-1 hover:text-gray-300'>Kết Nối</span>
             </div>
           </div>
-
           <div className='flex justify-end'>
-            <div
+            <Popover
               className='flex  items-center py-1 hover:text-gray-300 cursor-pointer'
-              ref={reference}
-              onMouseEnter={showPoppover}
-              onMouseLeave={hidePoppover}
+              renderPopover={
+                <div className='bg-white relative shadow-md rounded-sm boder border-gray-200'>
+                  <div className='flex flex-col py-2 px-3 pr-28 pl-3'>
+                    <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
+                    <button className='py-2 px-3 hover:text-orange mt-2'>Tiếng Anh</button>
+                  </div>
+                </div>
+              }
             >
               <svg
                 data-slot='icon'
@@ -63,44 +55,29 @@ export default function Header() {
               >
                 <path stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5'></path>
               </svg>
-              <FloatingPortal>
-                <AnimatePresence>
-                  {open && (
-                    <motion.div
-                      ref={floating}
-                      style={{
-                        position: strategy,
-                        top: y ?? 0,
-                        left: x ?? 0,
-                        width: 'max-content',
-                        transformOrigin: `${middlewareData.arrow?.x}px top`
-                      }}
-                      initial={{ opacity: 0, transform: 'scale(0)' }}
-                      animate={{ opacity: 1, transform: 'scale(1)' }}
-                      exit={{ opacity: 0, transform: 'scale(0)' }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <span
-                        ref={arrowRef}
-                        className='border-x-transparent border-t-transparent border-b-white border-[11px] absolute translate-y-[-95%] z-10'
-                        style={{
-                          left: middlewareData.arrow?.x,
-                          top: middlewareData.arrow?.y
-                        }}
-                      />
-                      <div className='bg-white relative shadow-md rounded-sm boder border-gray-200'>
-                        <div className='flex flex-col py-2 px-3'>
-                          <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
-                          <button className='py-2 px-3 hover:text-orange mt-2'>Tiếng Anh</button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </FloatingPortal>
-            </div>
-
-            <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer'>
+            </Popover>
+            <Popover
+              className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
+              renderPopover={
+                <div className='bg-white relative shadow-md rounded-sm boder border-gray-200'>
+                  <Link
+                    to=''
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Tài khoản của tôi
+                  </Link>
+                  <Link
+                    to=''
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Đơn mua
+                  </Link>
+                  <button className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'>
+                    Đăng Xuất
+                  </button>
+                </div>
+              }
+            >
               <div className='w-6 h-6 mr-2 flex-shrink-0'>
                 <img
                   src='https://static.topcv.vn/company_logos/B7XbctkSn6rlHZbiAWJbGXVKd4QSOs6e_1677147619____0a8ca902e04c78484b52638834b7bfaf.jpg'
@@ -109,7 +86,7 @@ export default function Header() {
                 />
               </div>
               <div>tuandev</div>
-            </div>
+            </Popover>
           </div>
         </div>
 
