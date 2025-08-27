@@ -1,4 +1,4 @@
-import { useForm, type RegisterOptions } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import Input from 'src/components/Input'
 import { schema, type Schema } from 'src/utils/rules'
