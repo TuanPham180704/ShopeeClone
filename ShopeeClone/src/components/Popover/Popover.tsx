@@ -8,7 +8,7 @@ interface Props {
   className?: string
   as?: ElementType
   initialOpen?: boolean
-  playcement?: Placement
+  placement?: Placement
 }
 
 export default function Popover({
@@ -16,15 +16,17 @@ export default function Popover({
   renderPopover,
   className,
   as: Element = 'div',
-  initialOpen,
-  playcement = 'bottom-end'
+  placement = 'bottom-end'
 }: Props) {
-  const [open, setOpen] = useState(initialOpen || false)
+  // const [open, setOpen] = useState(initialOpen || false)
+  // const [open, setOpen] = useState<boolean>(!!initialOpen)
+  const [open, setOpen] = useState(false)
+
   const arrowRef = useRef<HTMLElement>(null)
   const id = useId()
   const { x, y, reference, floating, strategy, middlewareData } = useFloating({
     middleware: [offset(6), shift(), arrow({ element: arrowRef })],
-    placement: playcement
+    placement: placement
   })
   const showPoppover = () => {
     setOpen(true)
