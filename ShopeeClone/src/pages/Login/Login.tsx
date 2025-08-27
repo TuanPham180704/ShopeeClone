@@ -4,6 +4,7 @@ import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginAccount } from 'src/apis/auth.api'
+import Button from 'src/components/Button'
 import Input from 'src/components/Input'
 import { AppContext } from 'src/contexts/app.contexts'
 import type { ErrorResponseApi } from 'src/types/utils.type'
@@ -13,7 +14,7 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 export default function Login() {
-  const {setIsAuthenticated} = useContext(AppContext)
+  const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
@@ -73,9 +74,14 @@ export default function Login() {
                 autoComplete='on'
               />
               <div className='mt-3'>
-                <button className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'>
+                <Button
+                  type='submit'
+                  className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'
+                  isLoading={loginMutation.isPending}
+                  disabled={loginMutation.isPending}
+                >
                   Đăng Nhập
-                </button>
+                </Button>
               </div>
               <div className='flex item-center justify-center mt-8'>
                 <span className='text-gray-300'>Bạn mới biết đến Shopee?</span>
