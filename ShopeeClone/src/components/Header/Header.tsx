@@ -7,7 +7,7 @@ import path from 'src/constants/path'
 import { AppContext } from 'src/contexts/app.contexts'
 
 export default function Header() {
-  const { setIsAuthenticated,setProfile, isAuthenticated,profile } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile, isAuthenticated, profile } = useContext(AppContext)
   const logoutMutation = useMutation({
     mutationFn: authApi.logoutAccount,
     onSuccess: () => {
