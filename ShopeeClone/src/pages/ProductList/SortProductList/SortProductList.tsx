@@ -2,6 +2,8 @@ import type { QueryConfig } from 'src/pages/ProductList/ProductList'
 import { sortBy } from 'src/constants/product'
 import classNames from 'classnames'
 import type { ProductListConfig } from 'src/types/product.type'
+import { createSearchParams, useNavigate } from 'react-router-dom'
+import path from 'src/constants/path'
 
 interface Props {
   queryConfig: QueryConfig
@@ -10,9 +12,18 @@ interface Props {
 
 export default function SortProductList({ queryConfig, pageSize }: Props) {
   const { sort_by = sortBy.createdAt } = queryConfig
-
+  const navigate = useNavigate()
   const isActiveSortBy = (sortByValue: Exclude<ProductListConfig['sort_by'], undefined>) => {
     return sort_by === sortByValue
+  }
+  const handleSort = (sortByValue: Exclude<ProductListConfig['sort_by'], undefined>) => {
+    navigate({
+      pathname : path.home,
+      search : createSearchParams({
+        ...queryConfig,
+        sort_by : sortByValue
+      }).toString()
+    })
   }
 
   return (
@@ -25,6 +36,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
               'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.view),
               'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.view)
             })}
+            onClick={() => handleSort(sortBy.view)}
           >
             Phổ biến
           </button>
@@ -33,6 +45,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
               'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.createdAt),
               'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.createdAt)
             })}
+            onClick={() => handleSort(sortBy.createdAt)}
           >
             Mới nhất
           </button>
@@ -41,6 +54,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
               'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.sold),
               'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.sold)
             })}
+            onClick={() => handleSort(sortBy.sold)}
           >
             Bán chạy
           </button>
