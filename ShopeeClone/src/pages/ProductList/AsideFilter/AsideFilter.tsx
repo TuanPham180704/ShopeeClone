@@ -1,29 +1,50 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames'
 import { Controller, useForm } from 'react-hook-form'
-import { createSearchParams, Link } from 'react-router-dom'
+import { createSearchParams, data, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import InputNumber from 'src/components/InputNumber'
 import path from 'src/constants/path'
 import type { QueryConfig } from 'src/pages/ProductList/ProductList'
 import type { Category } from 'src/types/category.type'
-
+import type { NoUndefinedField } from 'src/types/utils.type'
+import { schema, type Schema } from 'src/utils/rules'
+import { ObjectSchema } from 'yup'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
 }
-type FormData = {
-  price_min: string
-  price_max: string
-}
+type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
+const priceSchema = schema.pick(['price_min', 'price_max'])
+
 export default function AsideFilter({ queryConfig, categories }: Props) {
   const { category } = queryConfig
-  const { control, handleSubmit, watch } = useForm<FormData>({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    trigger,
+    formState: { errors }
+  } = useForm<FormData>({
     defaultValues: {
       price_min: '',
       price_max: ''
-    }
+    },
+    // resolver: yupResolver<FormData>(priceSchema as ObjectSchema<FormData>)
+    resolver: yupResolver<FormData, any, FormData>(priceSchema as ObjectSchema<FormData>)
   })
-
+  const valueForm = watch()
+  const navigate = useNavigate()
+  const onSubmit = handleSubmit((data) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        price_max: data.price_max,
+        price_min: data.price_min
+      }).toString()
+    })
+  })
   return (
     <div className='py-4'>
       {/* Tiêu đề */}
@@ -103,7 +124,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       <div className='my-4 h-[1px] bg-gray-300' />
       <div className='my-5'>
         <div>Khoản giá</div>
-        <form className='mt-2'>
+        <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
             <Controller
               control={control}
@@ -113,11 +134,14 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                   <InputNumber
                     type='text'
                     className='grow'
-                    name='from'
+                    {...field}
                     placeholder='đ Từ'
                     classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                    onChange={field.onChange}
-                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e)
+                      trigger('price_max')
+                    }}
+                    classNameError='hiden'
                   />
                 )
               }}
@@ -131,17 +155,21 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                   <InputNumber
                     type='text'
                     className='grow'
-                    name='from'
                     placeholder='đ Đến'
                     classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                    onChange={field.onChange}
-                    value={field.value}
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e)
+                      trigger('price_min')
+                    }}
+                    classNameError='hiden'
                   />
                 )
               }}
             />
             <div className='my-4 h-[1px] bg-gray-300' />
           </div>
+          <div className='mt-1 min-h-[1.25rem] text-center text-sm text-red-600'>{errors.price_min?.message}</div>
           <Button className='hover:bg-orange-80 flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white'>
             Áp dụng
           </Button>
