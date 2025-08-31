@@ -3,7 +3,6 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import HttpStatusCode from 'src/constants/httpStatusCode.enum'
 import path from 'src/constants/path'
-import type { AuthResponse } from 'src/types/auth.type'
 import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setProfileToLs } from 'src/utils/auth'
 
 class Http {
