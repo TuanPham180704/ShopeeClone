@@ -8,6 +8,7 @@ import productApi from 'src/apis/product.api'
 import Pagination from 'src/components/Pagination'
 import type { ProductListConfig } from 'src/types/product.type'
 
+
 export type QueryConfig = {
   [key in keyof ProductListConfig]: string
 }
@@ -17,13 +18,14 @@ export default function ProductList() {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || '1',
-      limit: queryParams.limit,
+      limit: queryParams.limit || '20',
       sort_by: queryParams.sort_by,
       exclude: queryParams.exclude,
       name: queryParams.name,
       price_max: queryParams.price_max,
       price_min: queryParams.price_min,
       rating_filter: queryParams.rating_filter
+ 
     },
     isUndefined
   )
@@ -33,8 +35,7 @@ export default function ProductList() {
     queryFn: () => {
       return productApi.getProducts(queryConfig as ProductListConfig)
     },
-    placeholderData : keepPreviousData
-    
+    placeholderData: keepPreviousData
   })
   console.log(data)
   return (
@@ -49,7 +50,7 @@ export default function ProductList() {
 
             {/* Cột danh sách sản phẩm */}
             <div className='col-span-9'>
-              <SortProductList queryConfig={queryConfig} pageSize={data.data.data.pagination.page_size}/>
+              <SortProductList queryConfig={queryConfig} pageSize={data.data.data.pagination.page_size} />
               <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                 {data.data.data.products.map((product) => (
                   <div className='col-span-1' key={product._id}>
