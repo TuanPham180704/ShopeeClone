@@ -6,8 +6,8 @@ import MainLayout from 'src/layouts/MainLayout'
 import RegisterLayout from 'src/layouts/RegisterLayout'
 import Login from 'src/pages/Login'
 import ProductList from 'src/pages/ProductList'
-import Profile from 'src/pages/ProductList/components/Profile'
-import Register from 'src/pages/ProductList/components/Register'
+import Profile from 'src/pages/Profile'
+import Register from 'src/pages/Register'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
