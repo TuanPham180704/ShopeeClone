@@ -1,11 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames'
+import { omit } from 'lodash'
 import { Controller, useForm } from 'react-hook-form'
-import { createSearchParams, data, Link, useNavigate } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import InputNumber from 'src/components/InputNumber'
 import path from 'src/constants/path'
 import type { QueryConfig } from 'src/pages/ProductList/ProductList'
+import RatingStart from 'src/pages/RatingStart'
 import type { Category } from 'src/types/category.type'
 import type { NoUndefinedField } from 'src/types/utils.type'
 import { schema, type Schema } from 'src/utils/rules'
@@ -45,6 +47,12 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       }).toString()
     })
   })
+  const handleRemoveAll = () => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(omit(queryConfig, ['price_min', 'price_max', 'rating_filter', 'category'])).toString()
+    })
+  }
   return (
     <div className='py-4'>
       {/* Tiêu đề */}
@@ -177,94 +185,12 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       </div>
       <div className='my-4 h-[1px] bg-gray-300' />
       <div className='text-sm'>Đánh giá</div>
-      <ul className='my-3'>
-        <li className='py-1 pl-2'>
-          <Link to='' className='flex items-center text-sm'>
-            {Array(5)
-              .fill(0)
-              .map((_, index) => {
-                const gradId = `starGrad-${index}`
-                return (
-                  <svg key={index} viewBox='0 0 24 24' className='mr-1 h-4 w-4' aria-hidden>
-                    <defs>
-                      <linearGradient id={gradId} x1='50%' x2='50%' y1='0%' y2='100%'>
-                        <stop offset='0' stopColor='#ffca11' />
-                        <stop offset='1' stopColor='#ffad27' />
-                      </linearGradient>
-                    </defs>
-                    {/* ngôi sao 5 cánh chuẩn 24x24, không cần transform */}
-                    <path
-                      d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'
-                      fill={`url(#${gradId})`}
-                      stroke='#ffa727'
-                      strokeWidth='1'
-                      strokeLinejoin='round'
-                    />
-                  </svg>
-                )
-              })}
-            <span className='ml-1'>Trở lên</span>
-          </Link>
-        </li>
-        <li className='py-1 pl-2'>
-          <Link to='' className='flex items-center text-sm'>
-            {Array(5)
-              .fill(0)
-              .map((_, index) => {
-                const gradId = `starGrad-${index}`
-                return (
-                  <svg key={index} viewBox='0 0 24 24' className='mr-1 h-4 w-4' aria-hidden>
-                    <defs>
-                      <linearGradient id={gradId} x1='50%' x2='50%' y1='0%' y2='100%'>
-                        <stop offset='0' stopColor='#ffca11' />
-                        <stop offset='1' stopColor='#ffad27' />
-                      </linearGradient>
-                    </defs>
-                    {/* ngôi sao 5 cánh chuẩn 24x24, không cần transform */}
-                    <path
-                      d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'
-                      fill={`url(#${gradId})`}
-                      stroke='#ffa727'
-                      strokeWidth='1'
-                      strokeLinejoin='round'
-                    />
-                  </svg>
-                )
-              })}
-            <span className='ml-1'>Trở lên</span>
-          </Link>
-        </li>
-        <li className='py-1 pl-2'>
-          <Link to='' className='flex items-center text-sm'>
-            {Array(5)
-              .fill(0)
-              .map((_, index) => {
-                const gradId = `starGrad-${index}`
-                return (
-                  <svg key={index} viewBox='0 0 24 24' className='mr-1 h-4 w-4' aria-hidden>
-                    <defs>
-                      <linearGradient id={gradId} x1='50%' x2='50%' y1='0%' y2='100%'>
-                        <stop offset='0' stopColor='#ffca11' />
-                        <stop offset='1' stopColor='#ffad27' />
-                      </linearGradient>
-                    </defs>
-                    {/* ngôi sao 5 cánh chuẩn 24x24, không cần transform */}
-                    <path
-                      d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'
-                      fill={`url(#${gradId})`}
-                      stroke='#ffa727'
-                      strokeWidth='1'
-                      strokeLinejoin='round'
-                    />
-                  </svg>
-                )
-              })}
-            <span className='ml-1'>Trở lên</span>
-          </Link>
-        </li>
-      </ul>
+      <RatingStart queryConfig={queryConfig} />
       <div className='my-4 h-[1px] bg-gray-300' />
-      <Button className='hover:bg-orange-80 flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white'>
+      <Button
+        onClick={handleRemoveAll}
+        className='hover:bg-orange-80 flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white'
+      >
         Xóa Tất Cả
       </Button>
     </div>
