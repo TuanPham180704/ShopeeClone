@@ -4,7 +4,7 @@ import productApi from 'src/apis/product.api'
 import InputNumber from 'src/components/InputNumber'
 import ProductRate from 'src/components/ProductRate'
 import { formatCurrency, formatNumberToSocialStyle, rateSale } from 'src/utils/utils'
-
+import DOMPurify from 'dompurify'
 export default function ProducDetail() {
   const { id } = useParams()
   const { data: productDetailData } = useQuery({
@@ -163,7 +163,18 @@ export default function ProducDetail() {
           </div>
         </div>
       </div>
-      
+      <div className='mt-8 bg-white p-4 shadow'>
+        <div className='container'>
+          <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Mô tả sản phẩm</div>
+          <div className='mx-4 mb-4 mt-12 text-sm leading-loose'>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(product.description)
+              }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
