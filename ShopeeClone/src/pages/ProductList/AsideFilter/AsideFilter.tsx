@@ -24,7 +24,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   const {
     control,
     handleSubmit,
-    watch,
+
     trigger,
     formState: { errors }
   } = useForm<FormData>({
@@ -35,7 +35,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
     // resolver: yupResolver<FormData>(priceSchema as ObjectSchema<FormData>)
     resolver: yupResolver<FormData, any, FormData>(priceSchema as ObjectSchema<FormData>)
   })
-  const valueForm = watch()
+ 
   const navigate = useNavigate()
   const onSubmit = handleSubmit((data) => {
     navigate({
