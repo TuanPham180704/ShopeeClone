@@ -25,8 +25,11 @@ export default function Header() {
           <div className='flex justify-start'>
             <div className='flex items-center py-1 cursor-pointer'>
               <span className='mx-1 hover:text-white/70'>Kênh Người Bán</span>
+               <div className='border-r-[1px] border-r-white/40 h-4' />
               <span className='mx-1 hover:text-white/70'>Trở Thành Người Bán Shopee</span>
+               <div className='border-r-[1px] border-r-white/40 h-4' />
               <span className='mx-1 hover:text-white/70'>Tải Ứng Dụng</span>
+               <div className='border-r-[1px] border-r-white/40 h-4' />
               <span className='mx-1 hover:text-white/70'>Kết Nối</span>
             </div>
           </div>
