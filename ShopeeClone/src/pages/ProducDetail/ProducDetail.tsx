@@ -6,7 +6,8 @@ import ProductRate from 'src/components/ProductRate'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 import DOMPurify from 'dompurify'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import type { Product } from 'src/types/product.type'
+import type { Product as ProductType, ProductListConfig } from 'src/types/product.type'
+import Product from 'src/pages/ProductList/components/Product'
 export default function ProducDetail() {
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
@@ -22,6 +23,15 @@ export default function ProducDetail() {
     () => (product ? product.images.slice(...currentIndexImage) : []),
     [product, currentIndexImage]
   )
+  const queryConfig = { limit: '20', page: '1', catagory: product?.category._id }
+  const { data: productsData } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => {
+      return productApi.getProducts(queryConfig as ProductListConfig)
+    },
+    staleTime: 3 * 60 * 1000,
+    enabled: Boolean(product)
+  })
   useEffect(() => {
     if (product && product.images.length > 0) {
       setActiveImage(product.images[0])
@@ -30,7 +40,7 @@ export default function ProducDetail() {
   if (!product) return null
 
   const next = () => {
-    if (currentIndexImage[1] < (product as Product).images.length) {
+    if (currentIndexImage[1] < (product as ProductType).images.length) {
       setCurrentIndexImage((prev) => [prev[0] + 1, prev[1] + 1])
     }
   }
@@ -43,18 +53,18 @@ export default function ProducDetail() {
   const chooseActive = (img: string) => {
     setActiveImage(img)
   }
-  const handleZoom = (e :React.MouseEvent<HTMLDivElement,MouseEvent>) => {
-      const react = e.currentTarget.getBoundingClientRect()
-      const image  = imageRef.current as HTMLImageElement
-      const {naturalHeight,naturalWidth} = image
-      const {offsetX,offsetY} = e.nativeEvent
-      const top = offsetY * (1 - naturalHeight /react.height)
-      const left = offsetX * (1 - naturalWidth /react.width)
-      image.style.width = naturalWidth + 'px'
-      image.style.height = naturalHeight + 'px'
-      image.style.maxWidth = 'unset'
-      image.style.top = top + 'px'
-      image.style.left = left + 'px'
+  const handleZoom = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const react = e.currentTarget.getBoundingClientRect()
+    const image = imageRef.current as HTMLImageElement
+    const { naturalHeight, naturalWidth } = image
+    const { offsetX, offsetY } = e.nativeEvent
+    const top = offsetY * (1 - naturalHeight / react.height)
+    const left = offsetX * (1 - naturalWidth / react.width)
+    image.style.width = naturalWidth + 'px'
+    image.style.height = naturalHeight + 'px'
+    image.style.maxWidth = 'unset'
+    image.style.top = top + 'px'
+    image.style.left = left + 'px'
   }
   const removeHandleZoom = () => {
     imageRef.current?.removeAttribute('style')
@@ -66,7 +76,11 @@ export default function ProducDetail() {
         <div className='bg-white p-4 shadow'>
           <div className='grid grid-cols-12 gap-5'>
             <div className='col-span-5'>
-              <div className='relative w-full pt-[100%] shadow overflow-hidden cursor-zoom-in' onMouseMove={handleZoom} onMouseLeave={removeHandleZoom}>
+              <div
+                className='relative w-full cursor-zoom-in overflow-hidden pt-[100%] shadow'
+                onMouseMove={handleZoom}
+                onMouseLeave={removeHandleZoom}
+              >
                 <img
                   src={activeImage}
                   alt={product.name}
@@ -216,16 +230,32 @@ export default function ProducDetail() {
           </div>
         </div>
       </div>
-      <div className='container'>
-        <div className='mt-8 bg-white p-4 shadow'>
-          <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Mô tả sản phẩm</div>
-          <div className='mx-4 mb-4 mt-12 text-sm leading-loose'>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(product.description)
-              }}
-            />
+      <div className='mt-8'>
+        <div className='container'>
+          <div className='mt-8 bg-white p-4 shadow'>
+            <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Mô tả sản phẩm</div>
+            <div className='mx-4 mb-4 mt-12 text-sm leading-loose'>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product.description)
+                }}
+              />
+            </div>
           </div>
+        </div>
+      </div>
+      <div className='mt-8'>
+        <div className='container'>
+          <div className='uppercase text-gray-400'>CÓ THỂ BẠN CŨNG THÍCH</div>
+          {productsData && (
+            <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+              {productsData.data.data.products.map((product) => (
+                <div className='col-span-1' key={product._id}>
+                  <Product product={product} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
