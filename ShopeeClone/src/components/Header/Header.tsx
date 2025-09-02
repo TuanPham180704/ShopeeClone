@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { omit } from 'lodash'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { createSearchParams, data, Link, useNavigate } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import authApi from 'src/apis/auth.api'
 import Popover from 'src/components/Popover'
 import path from 'src/constants/path'
@@ -17,7 +17,7 @@ const nameSchema = schema.pick(['name'])
 
 export default function Header() {
   const queryConfig = useQueryConfig()
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit } = useForm<FormData>({
     defaultValues: {
       name: ''
     },
