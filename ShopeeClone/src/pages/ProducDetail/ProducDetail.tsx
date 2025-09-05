@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import ProductRate from 'src/components/ProductRate'
@@ -8,9 +8,14 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { Product as ProductType, ProductListConfig } from 'src/types/product.type'
 import Product from 'src/pages/ProductList/components/Product'
 import QuantityController from 'src/components/QuantityController'
+import purchaseApi from 'src/apis/purchase.api'
+
+import { purchasesStatus } from 'src/constants/purchase'
+import { toast } from 'react-toastify'
 export default function ProducDetail() {
   const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
+  const queryClient = useQueryClient()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
@@ -33,6 +38,10 @@ export default function ProducDetail() {
     staleTime: 3 * 60 * 1000,
     enabled: Boolean(product)
   })
+  const addToCartMutation = useMutation({
+    mutationFn: purchaseApi.addToCart
+  })
+  console.log(addToCartMutation)
   useEffect(() => {
     if (product && product.images.length > 0) {
       setActiveImage(product.images[0])
@@ -72,6 +81,17 @@ export default function ProducDetail() {
   }
   const handleBuyCount = (value: number) => {
     setBuyCount(value)
+  }
+  const addToCart = () => {
+    addToCartMutation.mutate(
+      { buy_count: buyCount, product_id: product._id as string },
+      {
+        onSuccess: (data) => {
+          toast.success(data.data.message, { autoClose: 1000 })
+          queryClient.invalidateQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
+        }
+      }
+    )
   }
   return (
     <div className='bg-gray-200 py-6'>
@@ -167,11 +187,20 @@ export default function ProducDetail() {
               </div>
               <div className='mt-8 flex items-center'>
                 <div className='capitalize text-gray-500'>Số lượng</div>
-                <QuantityController max={product.quantity} value={buyCount} onDecrease={handleBuyCount} onIncrease={handleBuyCount} onType={handleBuyCount} />
+                <QuantityController
+                  max={product.quantity}
+                  value={buyCount}
+                  onDecrease={handleBuyCount}
+                  onIncrease={handleBuyCount}
+                  onType={handleBuyCount}
+                />
                 <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
               </div>
               <div className='mt-8 flex items-center'>
-                <button className='hover:bg-orange-5 flex h-12 items-center justify-center rounded-sm border border-orange bg-orange/10 px-5 capitalize text-orange shadow-sm'>
+                <button
+                  onClick={addToCart}
+                  className='hover:bg-orange-5 flex h-12 items-center justify-center rounded-sm border border-orange bg-orange/10 px-5 capitalize text-orange shadow-sm'
+                >
                   <svg
                     data-slot='icon'
                     fill='none'
