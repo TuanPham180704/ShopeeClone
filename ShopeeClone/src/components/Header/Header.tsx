@@ -216,14 +216,13 @@ export default function Header() {
                               />
                             </div>
                             <div className='ml-2 flex-grow overflow-hidden'>
-                              <div className='trumcate'>{purchase.product.name}</div>
+                              <div className='truncate'>{purchase.product.name}</div>
                             </div>
                             <div className='ml-2 flex-shrink-0'>
                               <span className='text-orange'>đ{formatCurrency(purchase.product.price)}</span>
                             </div>
                           </div>
                         ))}
-
                         <div className='mt-6 flex items-center justify-between'>
                           <div className='text- capitalize text-gray-500'>
                             {purchasesIncart.length > MAX_PURRCHASE ? purchasesIncart.length - MAX_PURRCHASE : ''} Thêm
