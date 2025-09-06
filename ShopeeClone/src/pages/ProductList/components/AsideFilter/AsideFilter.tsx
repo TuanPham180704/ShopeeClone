@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import InputNumber from 'src/components/InputNumber'
+import InputV2 from 'src/components/InputV2'
 import path from 'src/constants/path'
 import type { QueryConfig } from 'src/hooks/useQueryConfig'
 import RatingStart from 'src/pages/ProductList/components/RatingStart'
@@ -35,7 +36,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
     // resolver: yupResolver<FormData>(priceSchema as ObjectSchema<FormData>)
     resolver: yupResolver<FormData, any, FormData>(priceSchema as ObjectSchema<FormData>)
   })
- 
+
   const navigate = useNavigate()
   const onSubmit = handleSubmit((data) => {
     navigate({
@@ -134,7 +135,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
         <div>Khoản giá</div>
         <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
-            <Controller
+            {/* <Controller
               control={control}
               name='price_min'
               render={({ field }) => {
@@ -152,6 +153,18 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                     classNameError='hiden'
                   />
                 )
+              }}
+            /> */}
+            <InputV2
+              control={control}
+              name='price_min'
+              type='number'
+              className='grow'
+              placeholder='đ Từ'
+              classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+              classNameError='hiden'
+              onChange={() => {
+                trigger('price_max')
               }}
             />
             <div className='mx-2 mt-2 shrink-0'>-</div>
