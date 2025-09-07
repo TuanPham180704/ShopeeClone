@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import InputNumber, { type InputNumberProps } from 'src/components/InputNumber'
 
 interface Props extends InputNumberProps {
@@ -6,6 +6,7 @@ interface Props extends InputNumberProps {
   onIncrease?: (value: number) => void
   onDecrease?: (value: number) => void
   onType?: (value: number) => void
+  onFocusOut?: (value: number) => void
   classNameWrapper?: string
 }
 
@@ -13,12 +14,14 @@ export default function QuantityController({
   max,
   onIncrease,
   onDecrease,
+  onFocusOut,
   classNameWrapper = 'ml-10 ',
   onType,
+
   value,
   ...rest
 }: Props) {
-  const [localValue,setLocalValue] = useState<number>(Number(value) || 0)
+  const [localValue, setLocalValue] = useState<number>(Number(value) || 0)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let _value = Number(e.target.value)
     if (max !== undefined && _value > max) {
@@ -34,16 +37,20 @@ export default function QuantityController({
     if (max !== undefined && _value > max) {
       _value = max
     }
-    onType && onType(_value)
-     setLocalValue(_value)
+
+    onIncrease && onIncrease(_value)
+    setLocalValue(_value)
   }
   const decrease = () => {
     let _value = Number(value || localValue) - 1
     if (_value < 1) {
       _value = 1
     }
-    onType && onType(_value)
-     setLocalValue(_value)
+    onDecrease && onDecrease(_value)
+    setLocalValue(_value)
+  }
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
+    onFocusOut && onFocusOut(Number(e.target.value))
   }
   return (
     <div className={'flex items-center' + classNameWrapper}>
@@ -69,6 +76,7 @@ export default function QuantityController({
         classNameInput='h-8 w-14 border-y border-gray-300 p-1 text-center leading-8 outline-none'
         onChange={handleChange}
         value={value || localValue}
+        onBlur={handleBlur}
         {...rest}
       />
       <button
