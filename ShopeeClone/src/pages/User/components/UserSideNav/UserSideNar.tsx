@@ -1,31 +1,33 @@
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import path from 'src/constants/path'
-
+import { AppContext } from 'src/contexts/app.contexts'
+import userNotFound from '../../../../assets/user.svg'
 export default function UserSideNar() {
+  const { profile } = useContext(AppContext)
   return (
     <div>
       <div className='flex items-center border-b border-b-gray-200 py-4'>
         <Link to={path.profile} className='h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-black/10'>
-          <img
-            src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
-            alt='avatar'
-            className='h-full w-full object-cover'
-          />
+          <img src={(profile?.avatar || userNotFound) as string} alt='avatar' className='h-full w-full object-cover' />
         </Link>
         <div className='flex-grow pl-4'>
-          <div className='mb-1 truncate font-semibold text-gray-600'>tuandev</div>
+          <div className='mb-1 truncate font-semibold text-gray-600'>{profile?.email}</div>
           <Link to={path.profile} className='flex items-center capitalize text-gray-500'>
             <svg
-              width={12}
-              height={12}
-              viewBox='0 0 12 12'
+              data-slot='icon'
+              fill='none'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              viewBox='0 0 24 24'
               xmlns='http://www.w3.org/2000/svg'
-              style={{ marginRight: 4 }}
+              aria-hidden='true'
+              className='h-5 w-5'
             >
               <path
-                d='M8.54 0L6.987 1.561 3.46 3.48L12 3.48M0 8.52L7.073 3.428L3.46 12 6.18-3.46-3.48'
-                fill='#9B9B9B'
-                fillRule='evenodd'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10'
               />
             </svg>
             Sửa hồ sơ

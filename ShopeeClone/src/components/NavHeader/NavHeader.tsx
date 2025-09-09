@@ -6,7 +6,7 @@ import Popover from 'src/components/Popover'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
 import { AppContext } from 'src/contexts/app.contexts'
-
+import userNotFound from '../../assets/user.svg'
 export default function NavHeader() {
   const queryClient = useQueryClient()
   const { setIsAuthenticated, setProfile, isAuthenticated, profile } = useContext(AppContext)
@@ -89,7 +89,7 @@ export default function NavHeader() {
         >
           <div className='mr-2 h-6 w-6 flex-shrink-0'>
             <img
-              src='https://static.topcv.vn/company_logos/B7XbctkSn6rlHZbiAWJbGXVKd4QSOs6e_1677147619____0a8ca902e04c78484b52638834b7bfaf.jpg'
+              src={(profile?.avatar || userNotFound) as string}
               alt='avt'
               className='h-full w-full rounded-full object-cover'
             />
