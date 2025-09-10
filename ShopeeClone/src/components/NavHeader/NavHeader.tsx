@@ -6,7 +6,7 @@ import Popover from 'src/components/Popover'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
 import { AppContext } from 'src/contexts/app.contexts'
-import userNotFound from '../../assets/user.svg'
+import { getAvatarURL } from 'src/utils/utils'
 export default function NavHeader() {
   const queryClient = useQueryClient()
   const { setIsAuthenticated, setProfile, isAuthenticated, profile } = useContext(AppContext)
@@ -89,7 +89,7 @@ export default function NavHeader() {
         >
           <div className='mr-2 h-6 w-6 flex-shrink-0'>
             <img
-              src={(profile?.avatar || userNotFound) as string}
+              src={getAvatarURL(profile?.avatar as string | undefined)}
               alt='avt'
               className='h-full w-full rounded-full object-cover'
             />
