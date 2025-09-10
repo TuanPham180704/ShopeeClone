@@ -32,7 +32,8 @@ export default function Profile() {
     control,
     formState: { errors },
     handleSubmit,
-    setValue
+    setValue,
+    setError
   } = useForm<FormData>({
     defaultValues: {
       name: '',
@@ -215,8 +216,3 @@ export default function Profile() {
     </div>
   )
 }
-
-function setError(arg0: string, arg1: { message: string | undefined; type: string }) {
-  throw new Error('Function not implemented.')
-}
-
