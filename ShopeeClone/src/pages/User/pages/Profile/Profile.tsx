@@ -11,9 +11,9 @@ import { AppContext } from 'src/contexts/app.contexts'
 import DateSelect from 'src/pages/User/components/DateSelect'
 import { setProfileToLs } from 'src/utils/auth'
 import { userSchema, type UserSchema } from 'src/utils/rules'
-import avatar from '../../../../assets/user.svg'
 import { getAvatarURL, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import type { ErrorResponseApi } from 'src/types/utils.type'
+import config from 'src/constants/config'
 type FormData = Pick<UserSchema, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 type FormDataError = Omit<FormData, 'date_of_birth'> & {
   date_of_birth?: string
@@ -24,16 +24,16 @@ export default function Profile() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { setProfile } = useContext(AppContext)
   const [file, setFile] = useState<File>()
-  const previewImage = useMemo(() => {
-    return file ? URL.createObjectURL(file) : ''
-  }, [file])
+
+  const previewImage = useMemo(() => (file ? URL.createObjectURL(file) : ''), [file])
   const {
     register,
     control,
     formState: { errors },
     handleSubmit,
     setValue,
-    setError
+    setError,
+    // watch
   } = useForm<FormData>({
     defaultValues: {
       name: '',
@@ -44,17 +44,17 @@ export default function Profile() {
     },
     resolver: yupResolver(profileSchema) as any
   })
-
+  // const avatar = watch('avatar')
   const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
   const profile = profileData?.data.data
   const updateProfileMutation = useMutation({
-    mutationFn: (body: FormData) => userApi.updateProfile(body as any)
+    mutationFn: userApi.updateProfile
   })
-  const uploadAvatarMutation = useMutation({
-    mutationFn: (body: globalThis.FormData) => userApi.uploadAvatar(body)
+  const uploadAvatarMutaion = useMutation({
+    mutationFn: userApi.uploadAvatar
   })
 
   useEffect(() => {
@@ -67,25 +67,67 @@ export default function Profile() {
     }
   }, [profile, setValue])
 
+  // const onSubmit = handleSubmit(async (data) => {
+  //   try {
+  //     let avatarName = data.avatar || ''
+  //     if (file) {
+  //       const form = new FormData()
+  //       form.append('image', file)
+  //       const uploadRes = await uploadAvatarMutaion.mutateAsync(form as any)
+  //       avatarName = uploadRes.data.data
+  //       setValue('avatar', avatarName)
+
+  //     }
+  //     const payload = {
+  //       ...data,
+  //       date_of_birth: data.date_of_birth ? new Date(data.date_of_birth).toISOString() : undefined,
+  //       avatar: avatarName
+  //     }
+  //     const res = await updateProfileMutation.mutateAsync(payload as any)
+  //     setProfile(res.data.data)
+  //     setProfileToLs(res.data.data)
+  //     setFile(undefined)
+  //     refetch()
+  //     toast.success((res as { data: { message: string } }).data.message)
+  //   } catch (error) {
+  //     if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormDataError>>(error)) {
+  //       const formErr = error.response?.data.data
+  //       if (formErr) {
+  //         Object.keys(formErr).forEach((key) => {
+  //           setError(key as keyof FormDataError, {
+  //             message: formErr[key as keyof FormDataError],
+  //             type: 'Server'
+  //           })
+  //         })
+  //       }
+  //     }
+  //   }
+  // })
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let avatarName = avatar
+      let avatarName = data.avatar || ''
       if (file) {
         const form = new FormData()
         form.append('image', file)
-        const uploadRes = await uploadAvatarMutation.mutateAsync(form)
+        const uploadRes = await uploadAvatarMutaion.mutateAsync(form as any)
         avatarName = uploadRes.data.data
         setValue('avatar', avatarName)
       }
+
       const payload = {
         ...data,
         date_of_birth: data.date_of_birth ? new Date(data.date_of_birth).toISOString() : undefined,
         avatar: avatarName
       }
+
       const res = await updateProfileMutation.mutateAsync(payload as any)
       setProfile(res.data.data)
       setProfileToLs(res.data.data)
-      refetch()
+
+      // Đợi refetch hoàn thành trước khi reset file
+      await refetch()
+      setFile(undefined)
+
       toast.success((res as { data: { message: string } }).data.message)
     } catch (error) {
       if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormDataError>>(error)) {
@@ -101,12 +143,17 @@ export default function Profile() {
       }
     }
   })
+
   const handleUpload = () => {
     fileInputRef.current?.click()
   }
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileFromLocal = e.target.files ? e.target.files[0] : undefined
-    setFile(fileFromLocal)
+    if (fileFromLocal && (fileFromLocal.size >= config.maxSizeUploadAvatar || !fileFromLocal.type.includes('image'))) {
+      toast.error('Dung lượng tối đa 1MB')
+    } else {
+      setFile(fileFromLocal)
+    }
   }
   return (
     <div className='mx-auto max-w-5xl rounded-sm bg-white px-4 pb-10 shadow md:px-7 md:pb-20'>
@@ -193,12 +240,19 @@ export default function Profile() {
           <div className='flex flex-col items-center'>
             <div className='my-5 h-24 w-24'>
               <img
-                src={previewImage || getAvatarURL(avatar)}
+                src={previewImage || getAvatarURL(profile?.avatar)}
                 alt='avatar'
                 className='h-full w-full rounded-full object-cover'
               />
             </div>
-            <input className='hidden' type='file' accept='.jpg,.jpeg,.png' ref={fileInputRef} onChange={onFileChange} />
+            <input 
+            className='hidden' 
+            type='file' 
+            accept='.jpg,.jpeg,.png' 
+            ref={fileInputRef} 
+            onChange={onFileChange} 
+
+            />
             <button
               className='flex h-10 items-center justify-center rounded-sm border bg-white px-6 text-sm text-gray-600 shadow-sm'
               type='button'
