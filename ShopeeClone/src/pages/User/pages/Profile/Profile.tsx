@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import  { useContext, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import userApi from 'src/apis/user.api'
@@ -13,7 +13,8 @@ import { setProfileToLs } from 'src/utils/auth'
 import { userSchema, type UserSchema } from 'src/utils/rules'
 import { getAvatarURL, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import type { ErrorResponseApi } from 'src/types/utils.type'
-import config from 'src/constants/config'
+
+import InputFile from 'src/components/InputFile'
 type FormData = Pick<UserSchema, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 type FormDataError = Omit<FormData, 'date_of_birth'> & {
   date_of_birth?: string
@@ -21,10 +22,8 @@ type FormDataError = Omit<FormData, 'date_of_birth'> & {
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth', 'avatar'])
 
 export default function Profile() {
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const { setProfile } = useContext(AppContext)
   const [file, setFile] = useState<File>()
-
   const previewImage = useMemo(() => (file ? URL.createObjectURL(file) : ''), [file])
   const {
     register,
@@ -32,7 +31,7 @@ export default function Profile() {
     formState: { errors },
     handleSubmit,
     setValue,
-    setError,
+    setError
     // watch
   } = useForm<FormData>({
     defaultValues: {
@@ -143,17 +142,8 @@ export default function Profile() {
       }
     }
   })
-
-  const handleUpload = () => {
-    fileInputRef.current?.click()
-  }
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileFromLocal = e.target.files ? e.target.files[0] : undefined
-    if (fileFromLocal && (fileFromLocal.size >= config.maxSizeUploadAvatar || !fileFromLocal.type.includes('image'))) {
-      toast.error('Dung lượng tối đa 1MB')
-    } else {
-      setFile(fileFromLocal)
-    }
+  const handleChange = (file?: File) => {
+    setFile(file)
   }
   return (
     <div className='mx-auto max-w-5xl rounded-sm bg-white px-4 pb-10 shadow md:px-7 md:pb-20'>
@@ -245,21 +235,7 @@ export default function Profile() {
                 className='h-full w-full rounded-full object-cover'
               />
             </div>
-            <input 
-            className='hidden' 
-            type='file' 
-            accept='.jpg,.jpeg,.png' 
-            ref={fileInputRef} 
-            onChange={onFileChange} 
-
-            />
-            <button
-              className='flex h-10 items-center justify-center rounded-sm border bg-white px-6 text-sm text-gray-600 shadow-sm'
-              type='button'
-              onClick={handleUpload}
-            >
-              Chọn ảnh
-            </button>
+            <InputFile onChange={handleChange} />
             <div className='mt-3 text-gray-400'>
               <div>Dung lượng file tối đa 1 MB</div>
             </div>

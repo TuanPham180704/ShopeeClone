@@ -12,7 +12,7 @@ import { produce } from 'immer'
 import { keyBy } from 'lodash'
 import { toast } from 'react-toastify'
 import { AppContext } from 'src/contexts/app.contexts'
-import noProduct from '../../../public/giohang.png'
+import noProduct from 'src/assets/giohang.png'
 export default function Cart() {
   const { extendedPurchases, setExtendePurchases } = useContext(AppContext)
   const { data: purchasesIncartData, refetch } = useQuery({
