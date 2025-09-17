@@ -10,7 +10,7 @@ export default function UserLayout() {
             <UserSideNar />
           </div>
           <div className='md:col-span-9 lg:col-span-10'>
-            <Outlet />
+            <Outlet />       
           </div>
         </div>
       </div>
