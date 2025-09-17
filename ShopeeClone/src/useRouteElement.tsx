@@ -1,21 +1,32 @@
-import { useContext } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import Cart from 'src/components/Cart'
+// import Cart from 'src/components/Cart'
 
 import path from 'src/constants/path'
 import { AppContext } from 'src/contexts/app.contexts'
 import CartLayout from 'src/layouts/CartLayout'
+import UserLayout from 'src/pages/User/layouts/UserLayout'
 import MainLayout from 'src/layouts/MainLayout'
 import RegisterLayout from 'src/layouts/RegisterLayout'
-import Login from 'src/pages/Login'
-import ProducDetail from 'src/pages/ProducDetail'
-import ProductList from 'src/pages/ProductList'
-import Profile from 'src/pages/User/pages/Profile'
-import Register from 'src/pages/Register'
-import UserLayout from 'src/pages/User/layouts/UserLayout'
-import ChangePassword from 'src/pages/User/pages/ChangePassword'
-import HistoryPurchase from 'src/pages/User/pages/HistoryPurchase'
-import NotFound from 'src/pages/NotFound'
+// import Login from 'src/pages/Login'
+// import ProducDetail from 'src/pages/ProducDetail'
+// import ProductList from 'src/pages/ProductList'
+// import Profile from 'src/pages/User/pages/Profile'
+// import Register from 'src/pages/Register'
+
+// import ChangePassword from 'src/pages/User/pages/ChangePassword'
+// import HistoryPurchase from 'src/pages/User/pages/HistoryPurchase'
+// import NotFound from 'src/pages/NotFound'
+
+const Login = lazy(() => import('src/pages/Login'))
+const ProducDetail = lazy(() => import('src/pages/ProducDetail'))
+const ProductList = lazy(() => import('src/pages/ProductList'))
+const Profile = lazy(() => import('src/pages/User/pages/Profile'))
+const ChangePassword = lazy(() => import('src/pages/User/pages/ChangePassword'))
+const HistoryPurchase = lazy(() => import('src/pages/User/pages/HistoryPurchase'))
+const NotFound = lazy(() => import('src/pages/NotFound'))
+const Cart = lazy(() => import('src/components/Cart'))
+const Register = lazy(() => import('src/pages/Register'))
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -33,7 +44,9 @@ export default function useRouteElement() {
       index: true,
       element: (
         <MainLayout>
-          <ProductList />
+          <Suspense>
+            <ProductList />
+          </Suspense>
         </MainLayout>
       )
     },
@@ -42,7 +55,9 @@ export default function useRouteElement() {
       index: true,
       element: (
         <MainLayout>
-          <ProducDetail />
+          <Suspense>
+            <ProducDetail />
+          </Suspense>
         </MainLayout>
       )
     },
@@ -51,7 +66,9 @@ export default function useRouteElement() {
       index: true,
       element: (
         <MainLayout>
-          <NotFound />
+          <Suspense>
+            <NotFound />
+          </Suspense>
         </MainLayout>
       )
     },
@@ -63,7 +80,9 @@ export default function useRouteElement() {
           path: path.cart,
           element: (
             <CartLayout>
-              <Cart />
+              <Suspense>
+                <Cart />
+              </Suspense>
             </CartLayout>
           )
         },
@@ -77,15 +96,27 @@ export default function useRouteElement() {
           children: [
             {
               path: path.profile,
-              element: <Profile />
+              element: (
+                <Suspense>
+                  <Profile />
+                </Suspense>
+              )
             },
             {
               path: path.historyPurchase,
-              element: <HistoryPurchase />
+              element: (
+                <Suspense>
+                  <HistoryPurchase />
+                </Suspense>
+              )
             },
             {
               path: path.changePassword,
-              element: <ChangePassword />
+              element: (
+                <Suspense>
+                  <ChangePassword />
+                </Suspense>
+              )
             }
           ]
         }
@@ -99,7 +130,9 @@ export default function useRouteElement() {
           path: path.login,
           element: (
             <RegisterLayout>
-              <Login />
+              <Suspense>
+                <Login />
+              </Suspense>
             </RegisterLayout>
           )
         },
@@ -107,7 +140,9 @@ export default function useRouteElement() {
           path: path.register,
           element: (
             <RegisterLayout>
-              <Register />
+              <Suspense>
+                <Register />
+              </Suspense>
             </RegisterLayout>
           )
         }
