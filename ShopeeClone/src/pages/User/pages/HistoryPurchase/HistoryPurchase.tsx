@@ -51,7 +51,7 @@ export default function HistoryPurchase() {
     <div>
       <div className='overflow-x-auto'>
         <Helmet>
-          <title>HistoryPurchase | Shoppe</title>
+          <title>HistoryPurchase Page | Shoppe</title>
           <meta name='description' content='HistoryPurchase' />
         </Helmet>
         <div className='min-w-[700px]'>
