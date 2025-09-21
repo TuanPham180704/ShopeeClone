@@ -1,24 +1,42 @@
-import { useContext, useEffect } from "react"
-import { ToastContainer } from "react-toastify"
-import { AppContext } from "src/contexts/app.contexts"
-import useRouteElement from "src/useRouteElement"
-import { LocalStorageEventTarget } from "src/utils/auth"
+import { useContext, useEffect } from 'react'
+import { ToastContainer } from 'react-toastify'
+import { AppContext, AppProvider } from 'src/contexts/app.contexts'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import useRouteElement from 'src/useRouteElement'
+import { LocalStorageEventTarget } from 'src/utils/auth'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import ErrorBoundary from './components/ErrorBoundary'
+import { HelmetProvider } from 'react-helmet-async'
 
-function App() {
- const routeElements = useRouteElement()
- const {reset} = useContext(AppContext)
- useEffect(()=>{
-  LocalStorageEventTarget.addEventListener('clearLS',reset)
-  return () => {
-    LocalStorageEventTarget.removeEventListener('clearLS',reset)
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 0
+    }
   }
-
- },[reset])
+})
+function App() {
+  const routeElements = useRouteElement()
+  const { reset } = useContext(AppContext)
+  useEffect(() => {
+    LocalStorageEventTarget.addEventListener('clearLS', reset)
+    return () => {
+      LocalStorageEventTarget.removeEventListener('clearLS', reset)
+    }
+  }, [reset])
   return (
-    <div>
-  {routeElements}
-  <ToastContainer/>
-    </div>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <AppProvider>
+          <ErrorBoundary>
+            {routeElements}
+            <ToastContainer />
+          </ErrorBoundary>
+        </AppProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </HelmetProvider>
   )
 }
 
