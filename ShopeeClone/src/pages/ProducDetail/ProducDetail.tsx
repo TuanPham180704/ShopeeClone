@@ -9,11 +9,12 @@ import type { Product as ProductType, ProductListConfig } from 'src/types/produc
 import Product from 'src/pages/ProductList/components/Product'
 import QuantityController from 'src/components/QuantityController'
 import purchaseApi from 'src/apis/purchase.api'
-
 import { purchasesStatus } from 'src/constants/purchase'
 import { toast } from 'react-toastify'
 import path from 'src/constants/path'
+import { useTranslation } from 'react-i18next'
 export default function ProducDetail() {
+  const { t } = useTranslation(['product'])
   const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
   const queryClient = useQueryClient()
@@ -96,11 +97,11 @@ export default function ProducDetail() {
     )
   }
   const buyNow = async () => {
-    const res = await addToCartMutation.mutateAsync({buy_count: buyCount, product_id: product._id as string})
+    const res = await addToCartMutation.mutateAsync({ buy_count: buyCount, product_id: product._id as string })
     const purchase = res.data.data
-    navigate(path.cart,{
+    navigate(path.cart, {
       state: {
-        purchaseId : purchase._id
+        purchaseId: purchase._id
       }
     })
   }
@@ -205,7 +206,9 @@ export default function ProducDetail() {
                   onIncrease={handleBuyCount}
                   onType={handleBuyCount}
                 />
-                <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
+                <div className='ml-6 text-sm text-gray-500'>
+                  {product.quantity} {t('product:available')}
+                </div>
               </div>
               <div className='mt-8 flex items-center'>
                 <button
@@ -230,9 +233,10 @@ export default function ProducDetail() {
                   </svg>
                   Thêm Vào Giỏ Hàng
                 </button>
-                <button 
-                onClick={buyNow}
-                className='ml-4 flex h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90'>
+                <button
+                  onClick={buyNow}
+                  className='ml-4 flex h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90'
+                >
                   Mua ngay
                 </button>
               </div>

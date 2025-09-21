@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames'
-import omit  from 'lodash/omit'
+import omit from 'lodash/omit'
 import { Controller, useForm } from 'react-hook-form'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
@@ -13,6 +13,7 @@ import type { Category } from 'src/types/category.type'
 import type { NoUndefinedField } from 'src/types/utils.type'
 import { schema, type Schema } from 'src/utils/rules'
 import { ObjectSchema } from 'yup'
+import { useTranslation } from 'react-i18next'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
@@ -21,6 +22,7 @@ type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
 const priceSchema = schema.pick(['price_min', 'price_max'])
 
 export default function AsideFilter({ queryConfig, categories }: Props) {
+  const { t } = useTranslation('home')
   const { category } = queryConfig
   const {
     control,
@@ -74,7 +76,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
             </g>
           </g>
         </svg>
-        Tất cả danh mục
+        {t('aside filter.all categories')}
       </Link>
 
       {/* Divider */}
@@ -128,7 +130,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
             />
           </g>
         </svg>
-        Bộ lọc tìm kiếm
+        {t('aside filter.filter search')}
       </Link>
       <div className='my-4 h-[1px] bg-gray-300' />
       <div className='my-5'>
