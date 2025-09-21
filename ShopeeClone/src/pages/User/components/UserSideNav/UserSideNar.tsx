@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { useContext } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link, NavLink } from 'react-router-dom'
 import path from 'src/constants/path'
 import { AppContext } from 'src/contexts/app.contexts'
@@ -9,6 +10,10 @@ export default function UserSideNar() {
   return (
     <div>
       <div className='flex items-center border-b border-b-gray-200 py-4'>
+        <Helmet>
+          <title>UserSideNar | Shoppe</title>
+          <meta name='description' content='UserSideNar' />
+        </Helmet>
         <Link to={path.profile} className='h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-black/10'>
           <img
             src={getAvatarURL(profile?.avatar as string | undefined)}

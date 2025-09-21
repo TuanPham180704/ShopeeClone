@@ -1,7 +1,7 @@
+import { Helmet } from 'react-helmet-async'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import path from 'src/constants/path'
 import type { QueryConfig } from 'src/hooks/useQueryConfig'
-
 
 /**
  * index 0 : Có 5 cái màu vàng tương ứng từ indexStart 0 - 4 đều màu vàng
@@ -28,6 +28,10 @@ export default function RatingStart({ queryConfig }: Props) {
   }
   return (
     <ul className='my-3'>
+      <Helmet>
+        <title>RatingStart | Shoppe</title>
+        <meta name='description' content='RatingStart' />
+      </Helmet>
       {Array(5)
         .fill(0)
         .map((_, index) => (

@@ -1,5 +1,6 @@
 import { range } from 'lodash'
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 interface Props {
   onChange?: (value: Date) => void
@@ -16,12 +17,12 @@ export default function DateSelect({ value, errorMessage, onChange }: Props) {
   useEffect(() => {
     if (value) {
       setDate({
-        date: value.getDate() ,
+        date: value.getDate(),
         month: value.getMonth(),
-        year: value.getFullYear() 
+        year: value.getFullYear()
       })
     }
-  },[value])
+  }, [value])
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value: valueFormSelect, name } = e.target
     const newDate = {
@@ -35,6 +36,10 @@ export default function DateSelect({ value, errorMessage, onChange }: Props) {
   }
   return (
     <div className='mt-2 flex flex-col sm:flex-row sm:items-center'>
+      <Helmet>
+        <title>DateSelect | Shoppe</title>
+        <meta name='description' content='DateSelect' />
+      </Helmet>
       <div className='truncate pt-3 capitalize sm:w-[20%] sm:text-right'>Ngày sinh</div>
       <div className='sm:w-[80%] sm:pl-5'>
         <div className='flex justify-between gap-2'>

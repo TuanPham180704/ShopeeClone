@@ -14,6 +14,7 @@ import type { NoUndefinedField } from 'src/types/utils.type'
 import { schema, type Schema } from 'src/utils/rules'
 import { ObjectSchema } from 'yup'
 import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet-async'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
@@ -58,6 +59,10 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   }
   return (
     <div className='py-4'>
+      <Helmet>
+        <title>AsideFilter | Shoppe</title>
+        <meta name='description' content='AsideFilter' />
+      </Helmet>
       {/* Tiêu đề */}
       <Link
         to={path.home}
@@ -88,7 +93,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
         {categories.map((categoryItem) => {
           const isActive = category === categoryItem._id
           return (
-            <li className='py-2 pl-2'>
+            <li key={categoryItem._id} className='py-2 pl-2'>
               <Link
                 to={{
                   pathname: path.home,

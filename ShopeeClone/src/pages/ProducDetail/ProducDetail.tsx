@@ -13,6 +13,8 @@ import { purchasesStatus } from 'src/constants/purchase'
 import { toast } from 'react-toastify'
 import path from 'src/constants/path'
 import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet-async'
+import { convert } from 'html-to-text'
 export default function ProducDetail() {
   const { t } = useTranslation(['product'])
   const [buyCount, setBuyCount] = useState(1)
@@ -107,6 +109,17 @@ export default function ProducDetail() {
   }
   return (
     <div className='bg-gray-200 py-6'>
+      <Helmet>
+        <title>{product.name} | ShoppeClone</title>
+        <meta
+          name='description'
+          content={convert(product.description, {
+            limits: {
+              maxInputLength: 150
+            }
+          })}
+        />
+      </Helmet>
       <div className='container'>
         <div className='bg-white p-4 shadow'>
           <div className='grid grid-cols-12 gap-5'>
